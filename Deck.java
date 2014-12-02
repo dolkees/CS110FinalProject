@@ -17,8 +17,9 @@ public class Deck
    **/
    private int cardsInDeck=0;
 
-   /** The collection of Cards */
+   /** The collection of Cards in order */
    private ArrayList<Card> deck1;
+   
    private QueueReferenceBased deck;
    
    /**
@@ -27,7 +28,7 @@ public class Deck
     */
    public Deck()
    {
-            freshShuffledDeck();
+      freshShuffledDeck();
    }
    /**
     * Create a new collection of 52 cards, in shuffled order
@@ -62,10 +63,10 @@ public class Deck
       } 
    }
   
-     /** 
-     * Return current number of Cards in Deck
-     * @return number of Cards in Deck
-     */
+   /** 
+   * Returns current number of Cards in Deck
+   * @return number of Cards in Deck
+   */
 
    public int cardsRemaining()
    {  
@@ -73,7 +74,7 @@ public class Deck
    }
    
    /**
-      Returns the top card
+      Returns the top card and removes from deck
       @return card on top of pile
    */
    
@@ -83,10 +84,10 @@ public class Deck
       return (Card) deck.dequeue();
    }
    
-     /** 
-     * Determine if Deck is empty
-     * @return true if there are no more cards, false otherwise
-     */
+   /** 
+   * Determines if Deck is empty
+   * @return true if there are no more cards, false otherwise
+   */
    
    public boolean isEmpty()
    {

@@ -16,6 +16,7 @@ public class WarCardGame extends JFrame
 
    WarCardGame(String s)
    {
+      //Create buttons and card piles and arrange them as desired
       super(s); 
       panel = new JPanel();
       panel.setLayout(new BorderLayout());
@@ -49,6 +50,7 @@ public class WarCardGame extends JFrame
       add(panel);
    }
 
+   //Action listener that runs ffight sequence when button is pushed
    class ButtonListener implements ActionListener
    {
       public void actionPerformed(ActionEvent e)
@@ -70,62 +72,77 @@ public class WarCardGame extends JFrame
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.pack();
       frame.setVisible(true);
-
    }
+   
+   /**
+      fight method draws cards from each and compares them. 
+      player with higher rank gets card. if tie, runs war sequence
+      if not enough cards for war sequence, ends game
+      @param player player's deck
+      @param computer computer's deck
+   */
    
    public static void fight(Deck player, Deck computer)
    {
+      //draw cards to compare and display them in frame   
       Card playersCard = player.draw();
       playerCard.setIcon(playersCard.getIcon());
       Card computersCard = computer.draw();
       computerCard.setIcon(computersCard.getIcon());
-
+      
+      //compare cards and award them accordingly
       if (playersCard.isGreater(computersCard))
       {
          player.add(playersCard);
          player.add(computersCard);
-         //System.out.println("Player's "+playersCard+" beats Computer's "+computersCard);
       }
       else if (computersCard.isGreater(playersCard))
       {
-         //System.out.println("Computer's "+computersCard+" beats Player's "+playersCard);
          computer.add(computersCard);
          computer.add(playersCard);
       }
       else
       {
-         //System.out.println("Player's "+playersCard+" ties with Computer's "+computersCard);
+         //if tied, AND there's enough cards to do a war then continue to war
          if ((player.cardsRemaining()>3)&&(computer.cardsRemaining()>3))
-            war(player,computer,playersCard,computersCard);
+            war(player,computer,playersCard,computersCard);           
+         //if not enough cards, ends game
          else if (player.cardsRemaining()<3)
          {
-            //System.out.println("Player does not have enough cards to fight in War");
             endGame(player,computer);
          }
          else
          { 
-            //System.out.println("Computer does not have enough cards to fight in War");
             endGame(player,computer);
          }
       }
    }
    
+   /**
+      war method starts war sequence when cards drawn are the same rank
+      draws additional card from both players and then another one to compare
+      winner takes all
+      @param player players deck
+      @param computer computer's deck
+      @param playerCard0 player's card that tied
+      @param computerCard0 computer's card that tied
+   */
+   
    public static void war(Deck player, Deck computer, Card playerCard0, Card computerCard0)
    {
+      //draw additional cards
       Card playerCard1 = player.draw();
-            
       Card computerCard1 = computer.draw();
-            
+      
+      //draw cards to compare and display them in frame    
       Card playersCard = player.draw();
       playerCard.setIcon(playersCard.getIcon());
       Card computersCard = computer.draw();
       computerCard.setIcon(computersCard.getIcon());
-
+      
+      //whomever wins gets all cards
       if (playersCard.isGreater(computersCard))
       {
-         //System.out.println("Player's "+playersCard+" beats Computer's "+computersCard);
-         //System.out.println("Player won War!\nPlayer gets all the cards!");
-         //System.out.println("Cards won from Computer:\n"+computersCard+"\n"+computerCard1+"\n"+computerCard0);
          player.add(playersCard);
          player.add(playerCard0);
          player.add(playerCard1);
@@ -135,9 +152,6 @@ public class WarCardGame extends JFrame
       }
       else if (computersCard.isGreater(playersCard))
       {
-         //System.out.println("Computer's "+computersCard+" beats Player's "+playersCard);
-         //System.out.println("Computer won War!\nComputer gets all the cards!");
-         //System.out.println("Cards lost to Computer:\n"+playersCard+"\n"+playerCard1+"\n"+playerCard0);
          computer.add(computersCard);
          computer.add(computerCard0);
          computer.add(computerCard1);
@@ -145,9 +159,8 @@ public class WarCardGame extends JFrame
          computer.add(playerCard0);
          computer.add(playerCard1);
       }
-      else
+      else //if tie, return all cards to players (much simpler than double war, triple war, etc.
       {
-         //System.out.println("Draw");
          player.add(playersCard);
          player.add(playerCard0);
          player.add(playerCard1);
@@ -157,8 +170,15 @@ public class WarCardGame extends JFrame
       }
    }
    
+   /**
+      endGame method determines winner and ends game
+      @param player player's deck
+      @param computer computer's deck
+   */
+   
    public static void endGame(Deck player, Deck computer)
    {      
+      //give winner all remaining cards if they exist and display winning message
       if (player.cardsRemaining()>computer.cardsRemaining())
       {
          for (int i = 0; i<computer.cardsRemaining();i++)
@@ -177,6 +197,7 @@ public class WarCardGame extends JFrame
          playerCards.setText("Computer is WINNER           ");
          computerCards.setText("You're a LOSER!");
       }
+      //Remove go button so it can't be pushed again
       panelCards.remove(continueButton);
    }
   
